@@ -1,18 +1,1 @@
-<?php
-if ($this->model->hasTracking()) {
-    ?>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $this->model->getTrackingId(); ?>"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', '<?= $this->model->getTrackingId(); ?>');
-    </script>
-    <?php
-}
-?>
+<?php /* Reserved for future use */ ?>
