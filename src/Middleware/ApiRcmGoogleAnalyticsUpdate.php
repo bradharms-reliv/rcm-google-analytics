@@ -3,6 +3,8 @@
 namespace Reliv\RcmGoogleAnalytics\Middleware;
 
 use Doctrine\ORM\EntityManager;
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\RcmGoogleAnalytics\Api\Acl\IsAllowed;
@@ -17,7 +19,7 @@ use Zend\Diactoros\Response\JsonResponse;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class ApiRcmGoogleAnalyticsUpdate
+class ApiRcmGoogleAnalyticsUpdate implements MiddlewareInterface
 {
     protected $entityManager;
     protected $getCurrentSiteId;
@@ -61,10 +63,9 @@ class ApiRcmGoogleAnalyticsUpdate
      *
      * @return ResponseInterface|JsonResponse
      */
-    public function __invoke(
+    public function process(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
+        DelegateInterface $delegate
     ) {
         if (!$this->isAllowed->__invoke($request)) {
             return new JsonResponse(

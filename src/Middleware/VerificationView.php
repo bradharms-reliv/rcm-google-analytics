@@ -2,6 +2,8 @@
 
 namespace Reliv\RcmGoogleAnalytics\Middleware;
 
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\RcmGoogleAnalytics\Api\Analytics\GetCurrentAnalyticEntityWithVerifyCode;
@@ -11,7 +13,7 @@ use Zend\Diactoros\Response\HtmlResponse;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class VerificationView
+class VerificationView implements MiddlewareInterface
 {
     protected $getCurrentAnalyticEntityWithVerifyCode;
 
@@ -33,15 +35,13 @@ class VerificationView
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
-     * @param callable               $next
+     * @param DelegateInterface      $next
      *
      * @return ResponseInterface|HtmlResponse
      */
-    public function __invoke(
+    public function process(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
+        DelegateInterface $delegate
     ) {
         $requestVerificationCode = $request->getAttribute('verificationCode');
 

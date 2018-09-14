@@ -2,6 +2,8 @@
 
 namespace Reliv\RcmGoogleAnalytics\Middleware;
 
+use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Reliv\RcmGoogleAnalytics\Api\Acl\IsAllowed;
@@ -11,7 +13,7 @@ use Zend\Diactoros\Response\HtmlResponse;
 /**
  * @author James Jervis - https://github.com/jerv13
  */
-class RcmGoogleAnalyticsAdminView
+class RcmGoogleAnalyticsAdminView implements MiddlewareInterface
 {
     protected $translate;
     protected $isAllowed;
@@ -34,15 +36,13 @@ class RcmGoogleAnalyticsAdminView
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
-     * @param callable               $next
+     * @param DelegateInterface      $delegate
      *
      * @return ResponseInterface|HtmlResponse
      */
-    public function __invoke(
+    public function process(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        callable $next
+        DelegateInterface $delegate
     ) {
         if (!$this->isAllowed->__invoke($request)) {
             return new HtmlResponse(
